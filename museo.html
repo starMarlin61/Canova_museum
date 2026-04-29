@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sale Espositive | Canova: L'Eterna Quiete</title>
+
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            --accent-color: #d4af37; /* Oro antico */
+            --glass: rgba(18, 18, 18, 0.85);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: #000;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR MODERNA */
+        #sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 350px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 100;
+            padding: 60px 40px;
+            transform: translateX(0);
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            border-right: 1px solid rgba(255,255,255,0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar-hidden #sidebar { transform: translateX(-100%); }
+
+        /* TOGGLE BUTTON */
+        #toggle-menu {
+            position: fixed;
+            left: 30px;
+            top: 30px;
+            z-index: 101;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .bar {
+            width: 25px;
+            height: 2px;
+            background: #fff;
+            transition: 0.4s;
+        }
+
+        body:not(.sidebar-hidden) .bar:nth-child(1) { transform: translateY(4px) rotate(45deg); width: 15px; }
+        body:not(.sidebar-hidden) .bar:nth-child(2) { transform: translateY(-4px) rotate(-45deg); width: 15px; }
+
+        /* LISTA OPERE */
+        h1 { font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent-color); margin-bottom: 50px; }
+        .opera-list { display: flex; flex-direction: column; gap: 10px; }
+        .opera-link {
+            background: none; border: none; color: rgba(255,255,255,0.5);
+            text-align: left; padding: 15px 0; font-size: 14px; letter-spacing: 1px;
+            cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+        .opera-link:hover, .opera-link.active { color: #fff; letter-spacing: 2px; }
+
+        /* VISUALIZZATORE PC */
+        #viewer-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+        }
+
+        /* TASTO AR PERSONALIZZATO */
+        #ar-button {
+            background-color: var(--accent-color);
+            border-radius: 8px;
+            border: none;
+            padding: 12px 24px;
+            color: #000;
+            font-weight: bold;
+            font-size: 12px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        /* INFO BOX PC */
+        #info-box {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            text-align: right;
+            max-width: 500px;
+            pointer-events: none;
+            transition: opacity 0.5s;
+            z-index: 10;
+        }
+
+        #opera-title { font-size: 42px; font-family: serif; margin: 0 0 10px 0; font-weight: 200; }
+        #opera-desc { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.8; margin: 0; }
+
+        .back-link {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            color: rgba(255,255,255,0.3);
+            text-decoration: none;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- SISTEMAZIONE MOBILE (Layout a strati) --- */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; display: block; }
+            
+            #sidebar { width: 100%; padding: 80px 30px; }
+
+            #viewer-container {
+                height: auto;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Titolo in alto */
+            #info-box {
+                position: relative;
+                top: 0; right: 0; bottom: 0; left: 0;
+                padding: 100px 20px 20px 20px;
+                text-align: center;
+                order: 1;
+            }
+
+            #opera-title { font-size: 28px; margin-bottom: 5px; }
+            #opera-desc { display: none; } /* Nascondiamo la desc qui perché andrà sotto */
+
+            /* Statua in mezzo */
+            model-viewer {
+                height: 50vh;
+                order: 2;
+                flex: none;
+            }
+
+            /* Descrizione in basso con divisore */
+            #mobile-desc-container {
+                display: block;
+                order: 3;
+                padding: 30px 20px;
+                background: #0a0a0a;
+                border-top: 1px solid #333;
+                text-align: center;
+            }
+
+            #mobile-desc-text {
+                font-size: 14px;
+                color: rgba(255,255,255,0.7);
+                line-height: 1.6;
+                margin: 0;
+            }
+
+            .back-link {
+                position: relative;
+                bottom: 0; left: 0;
+                padding: 40px 0;
+                display: block;
+                text-align: center;
+            }
+        }
+
+        /* Nascondi contenitore mobile su PC */
+        @media (min-width: 769px) {
+            #mobile-desc-container { display: none; }
+        }
+    </style>
+</head>
+<body class="sidebar-hidden">
+
+    <button id="toggle-menu" onclick="toggleSidebar()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </button>
+
+    <aside id="sidebar">
+        <h1>Canova / Eterna Quiete</h1>
+        
+        <div class="opera-list">
+            <button class="opera-link active" onclick="updateViewer('orfeo', 'Orfeo ed Euridice', 'L\'istante fatale del volgersi: quando l\'amore sfida l\'abisso e perde.')">01. Orfeo e Euridice</button>
+            <button class="opera-link" onclick="updateViewer('ercole', 'Ercole e Lica', 'La forma massima del dolore fisico e della furia che precede l\'inevitabile.')">02. Ercole e Lica</button>
+            <button class="opera-link" onclick="updateViewer('teseo', 'Teseo sul Centauro', 'L\'equilibrio neoclassico che doma la ferocia della morte selvaggia.')">03. Teseo sul Centauro</button>
+            <button class="opera-link" onclick="updateViewer('penitente', 'Maddalena Penitente', 'La bellezza che si consuma nel pensiero dell\'oltre.')">04. Maddalena Penitente</button>
+            <button class="opera-link" onclick="updateViewer('giacente', 'Maddalena Giacente', 'Un abbandono marmoreo tra l\'ultimo respiro e l\'eternità.')">05. Maddalena Giacente</button>
+            <button class="opera-link" onclick="updateViewer('amore_psiche', 'Amore e Psiche', 'Il bacio che rompe l\'incantesimo del sonno eterno.')">06. Amore e Psiche</button>
+            <button class="opera-link" onclick="updateViewer('tomba', 'Tempio Canoviano', 'L\'ultimo atto: dove il corpo del genio riposa nell\'opera totale.')">07. Tomba di Canova</button>
+        </div>
+
+        <a href="index.html" class="back-link">Torna all'entrata</a>
+    </aside>
+
+    <main id="viewer-container">
+        <div id="info-box">
+            <h2 id="opera-title">Orfeo ed Euridice</h2>
+            <p id="opera-desc">L'istante fatale del volgersi: quando l'amore sfida l'abisso e perde.</p>
+        </div>
+
+        <model-viewer id="view" 
+            src="models/orfeo.glb" 
+            camera-controls 
+            auto-rotate 
+            interaction-prompt="none"
+            shadow-intensity="1" 
+            environment-image="neutral"
+            exposure="1"
+            scale="0.05 0.05 0.05"
+            ar
+            ar-modes="webxr scene-viewer quick-look">
+            
+            <button slot="ar-button" id="ar-button">
+                VEDI IN REALTÀ AUMENTATA
+            </button>
+        </model-viewer>
+
+        <div id="mobile-desc-container">
+            <p id="mobile-desc-text">L'istante fatale del volgersi: quando l'amore sfida l'abisso e perde.</p>
+        </div>
+
+        <a href="index.html" class="back-link">Torna all'entrata</a>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-hidden');
+        }
+
+        function updateViewer(file, title, desc) {
+            const viewer = document.getElementById('view');
+            
+            // Aggiorna modello
+            viewer.src = `models/${file}.glb`;
+            
+            // Aggiorna testi (sia PC che Mobile)
+            document.getElementById('opera-title').innerText = title;
+            document.getElementById('opera-desc').innerText = desc;
+            document.getElementById('mobile-desc-text').innerText = desc;
+            
+            // Classe Active
+            document.querySelectorAll('.opera-link').forEach(btn => btn.classList.remove('active'));
+            if (event) event.currentTarget.classList.add('active');
+
+            // Chiusura menu automatica su mobile
+            if (window.innerWidth < 768) {
+                setTimeout(() => {
+                    if (!document.body.classList.contains('sidebar-hidden')) {
+                        toggleSidebar();
+                    }
+                }, 400);
+            }
+        }
+    </script>
+
+</body>
+</html>

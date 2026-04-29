@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canova: L'Eterna Quiete | Entrata</title>
+    <style>
+        /* Reset e Font */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #0a0a0a; /* Sfondo nero profondo */
+            color: #e0e0e0;
+            font-family: 'optima', 'Georgia', serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Overlay decorativo con sfumatura */
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(40,40,40,1) 0%, rgba(10,10,10,1) 80%);
+            z-index: -1;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 700px;
+            padding: 50px;
+            border: 1px solid #222;
+            background: rgba(15, 15, 15, 0.9);
+            box-shadow: 0 0 100px rgba(0,0,0,0.8);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin: 0;
+            color: #ffffff;
+            font-weight: 300;
+        }
+
+        .divider {
+            width: 60px;
+            height: 2px;
+            background-color: #8a7a5f;
+            margin: 20px auto;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #8a7a5f;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        p {
+            line-height: 1.8;
+            font-size: 1.15rem;
+            margin-bottom: 50px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .enter-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            border: 1px solid #8a7a5f;
+            color: #8a7a5f;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.9rem;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .enter-btn:hover {
+            background-color: #8a7a5f;
+            color: white;
+            box-shadow: 0 0 30px rgba(138, 122, 95, 0.3);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-overlay"></div>
+
+    <div class="container">
+        <h1>CANOVA</h1>
+        <div class="divider"></div>
+        <div class="subtitle">L'Eterna Quiete</div>
+        
+        <p>
+            "La morte non è l'estinzione, ma la trasformazione nel marmo eterno." <br><br>
+            Un percorso attraverso sette opere che esplorano il confine tra il soffio vitale 
+            e l'immobilità del sepolcro. Dalla tragedia del distacco alla pace della devozione.
+        </p>
+
+        <a href="museo.html" class="enter-btn">Inizia l'esplorazione</a>
+    </div>
+
+</body>
+</html>
