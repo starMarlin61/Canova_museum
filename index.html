@@ -3,112 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canova: L'Eterna Quiete | Entrata</title>
+    <title>Canova | La Soglia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Reset e Font */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #0a0a0a; /* Sfondo nero profondo */
-            color: #e0e0e0;
-            font-family: 'optima', 'Georgia', serif;
+            background-color: #000;
+            overflow: hidden;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Contenitore principale con prospettiva */
+        #portal-wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            perspective: 1200px;
             overflow: hidden;
         }
 
-        /* Overlay decorativo con sfumatura */
-        .background-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(40,40,40,1) 0%, rgba(10,10,10,1) 80%);
-            z-index: -1;
+        /* L'immagine del monumento con animazione di respiro */
+        .monument-img {
+            position: absolute;
+            width: 110%; /* Leggermente più grande per il movimento */
+            height: 110%;
+            background: url('image_c09740.jpg') center center no-repeat;
+            background-size: cover;
+            filter: brightness(0.65) contrast(1.1);
+            transform-origin: center 62%; /* Centrato sulla porta nera */
+            
+            /* Animazione Ken Burns costante */
+            animation: slowBreath 20s infinite alternate ease-in-out;
+            transition: transform 2.8s cubic-bezier(0.7, 0, 0.3, 1), 
+                        filter 2.5s ease-in-out;
         }
 
-        .container {
+        @keyframes slowBreath {
+            0% { transform: scale(1.0); }
+            100% { transform: scale(1.08) translate(-1%, -1%); }
+        }
+
+        /* Overlay radiale per focalizzare la luce sulla soglia */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center 62%, 
+                        transparent 0%, 
+                        rgba(0,0,0,0.3) 40%, 
+                        rgba(0,0,0,0.9) 85%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* UI Testuale */
+        .ui-container {
+            position: relative;
+            z-index: 10;
             text-align: center;
-            max-width: 700px;
-            padding: 50px;
-            border: 1px solid #222;
-            background: rgba(15, 15, 15, 0.9);
-            box-shadow: 0 0 100px rgba(0,0,0,0.8);
+            color: #fff;
+            transition: opacity 0.8s ease, filter 0.8s ease;
         }
 
         h1 {
-            font-size: 3.5rem;
-            letter-spacing: 8px;
-            text-transform: uppercase;
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            letter-spacing: 15px;
             margin: 0;
-            color: #ffffff;
-            font-weight: 300;
+            text-shadow: 0 0 30px rgba(0,0,0,1);
+            font-weight: 400;
         }
 
-        .divider {
-            width: 60px;
-            height: 2px;
-            background-color: #8a7a5f;
-            margin: 20px auto;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: #8a7a5f;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 40px;
-        }
-
-        p {
-            line-height: 1.8;
-            font-size: 1.15rem;
+        .tagline {
+            letter-spacing: 6px;
+            opacity: 0.6;
             margin-bottom: 50px;
-            color: #999;
-            font-style: italic;
-        }
-
-        .enter-btn {
-            display: inline-block;
-            padding: 18px 50px;
-            border: 1px solid #8a7a5f;
-            color: #8a7a5f;
-            text-decoration: none;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 0.9rem;
-            transition: all 0.5s ease;
-            position: relative;
         }
 
-        .enter-btn:hover {
-            background-color: #8a7a5f;
-            color: white;
-            box-shadow: 0 0 30px rgba(138, 122, 95, 0.3);
+        .enter-trigger {
+            background: none;
+            border: 1px solid #c5a059;
+            color: #c5a059;
+            padding: 18px 50px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 5px;
             cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enter-trigger:hover {
+            background: #c5a059;
+            color: #000;
+            box-shadow: 0 0 40px rgba(197, 160, 89, 0.4);
+            transform: translateY(-3px);
+        }
+
+        /* Schermo nero per la transizione finale */
+        .blackout {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+            transition: opacity 1.8s ease;
+        }
+
+        /* Classi attivate via JS per l'effetto 3D di entrata */
+        .zooming {
+            animation: none !important; /* Ferma il respiro quando clicchi */
+            transform: scale(15) translateY(4%) !important; /* Zoom massiccio nel buio */
+            filter: brightness(0) blur(15px) !important;
+        }
+        
+        .fade-out {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-    <div class="background-overlay"></div>
-
-    <div class="container">
-        <h1>CANOVA</h1>
-        <div class="divider"></div>
-        <div class="subtitle">L'Eterna Quiete</div>
+    <div id="portal-wrapper">
+        <div class="monument-img" id="hero-img"></div>
+        <div class="overlay"></div>
         
-        <p>
-            "La morte non è l'estinzione, ma la trasformazione nel marmo eterno." <br><br>
-            Un percorso attraverso sette opere che esplorano il confine tra il soffio vitale 
-            e l'immobilità del sepolcro. Dalla tragedia del distacco alla pace della devozione.
-        </p>
-
-        <a href="museo.html" class="enter-btn">Inizia l'esplorazione</a>
+        <div class="ui-container" id="ui">
+            <h1>CANOVA</h1>
+            <div class="tagline">Il Varco dell'Eterno</div>
+            <button class="enter-trigger" onclick="startSequence()">Varcate la Soglia</button>
+        </div>
     </div>
 
+    <div class="blackout" id="blackout"></div>
+
+    <script>
+        function startSequence() {
+            const img = document.getElementById('hero-img');
+            const blackout = document.getElementById('blackout');
+            const ui = document.getElementById('ui');
+
+            // 1. Dissolvenza UI
+            ui.style.opacity = '0';
+            ui.style.filter = 'blur(10px)';
+
+            // 2. Effetto "tuffo" nel monumento
+            img.classList.add('zooming');
+
+            // 3. Il buio totale copre la scena
+            setTimeout(() => {
+                blackout.classList.add('fade-out');
+            }, 1400);
+
+            // 4. Caricamento catalogo
+            setTimeout(() => {
+                window.location.href = 'catalogo.html';
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
